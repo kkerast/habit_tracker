@@ -46,14 +46,28 @@
     </style>
 </head>
 <script>
+function addHabit()
+{
+    let formData = new FormData();
+    let TODO = habitInput.value
+    console.log(TODO)
+    let User_ID = 'test_id';
 
+    formData.append("TODO_give", TODO);
+    formData.append("User_ID_give", User_ID);
+
+    fetch('/addHabit', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
+        alert(data["result"]);
+        window.location.reload()
+    });
+}
 </script>
 <body>
     <div class="container">
         <h1>일주일 단위 Habit Tracker</h1>
         <div class="add-habit">
             <input type="text" id="habitInput" placeholder="새로운 습관 추가">
-            <button id="addHabit">추가</button>
+            <button id="addHabit" onclick="addHabit()">추가</button>
         </div>
         <div class="add-habit">
         <table>
@@ -107,3 +121,4 @@
 </body>
 
 </html>
+
