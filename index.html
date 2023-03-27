@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>일주일 단위 Habit Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            text-align: center;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            min-width: 100px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        .container {
+            width: 80%;
+        }
+
+        .add-habit {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<script>
+
+</script>
+<body>
+    <div class="container">
+        <h1>누구의 Habit Tracker</h1>
+        <button id="">log out</button>
+            <input type="text" id="habitInput" placeholder="새로운 습관 추가">
+            <button id="addHabit">추가</button>
+        </div>
+        <div class="add-habit">
+        <table>
+            <thead>
+                <tr>
+                    <th>habit</th>
+                    <th>3/27<br>월요일</th>
+                    <th>3/28<br>화요일</th>
+                    <th>3/29<br>수요일</th>
+                    <th>3/30<br>목요일</th>
+                    <th>3/31<br>금요일</th>
+                    <th>4/1<br>토요일</th>
+                    <th>4/2<br>일요일</th>
+                    <th>진도율</th>
+                </tr>
+            </thead>
+            <tbody id="habitList">
+                <!-- 추가 습관 행이 이 위치에 자동으로 입력됩니다. -->
+                <tr>
+                    <td>제목1
+                        <button id="updateHabit">수정</button>
+                        <button id="deleteHabit">삭제</button>
+                    </td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td> 30 % </td>
+                </tr>
+                <tr>
+                    <td>제목2
+                        <button id="updateHabit">수정</button>
+                        <button id="deleteHabit">삭제</button>
+                    </td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td> 100%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>
