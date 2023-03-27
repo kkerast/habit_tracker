@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify
 app = Flask(__name__)
 import datetime
 from pymongo import MongoClient
-client = MongoClient('mongodb+srv://sparta:test@cluster0.9fktzhz.mongodb.net/?retryWrites=true&w=majority') #각자의 DB 주소를 넣어주세요
+client = MongoClient('yourdb') #각자의 DB 주소를 넣어주세요
 db = client.toy_project.habit #각자의 DB 및 collection
 
 
