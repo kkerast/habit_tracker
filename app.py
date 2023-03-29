@@ -23,7 +23,11 @@ app = Flask(__name__)
 import datetime
 from pymongo import MongoClient
 <<<<<<< HEAD
+<<<<<<< HEAD
 client = MongoClient('mongodb+srv://sparta:test@cluster0.9fktzhz.mongodb.net/?retryWrites=true&w=majority') #각자의 DB 주소를 넣어주세요
+=======
+client = MongoClient('yourdb') #각자의 DB 주소를 넣어주세요
+>>>>>>> 0f784c0c7adf1f37e4e5a87b6f5fba949b8c4010
 db = client.toy_project.habit #각자의 DB 및 collection
 =======
 client = MongoClient('mongodb+srv://devdeeplake:<password>@cluster0.p2pjkxs.mongodb.net/?retryWrites=true&w=majority') #각자의 DB 주소를 넣어주세요
@@ -84,5 +88,9 @@ def getWeekDates() :
 
 >>>>>>> a7cb65879a5b5a9ae1a9b99ee747c0bde1a1d537
 if __name__ == '__main__':
+<<<<<<< HEAD
     # app.run('0.0.0.0', port=5000, debug=True) #Mac 분들은 주의해주세요
    app.run('0.0.0.0', port=5001, debug=True) #Mac 용 세팅
+=======
+   app.run('0.0.0.0', port=5000, debug=True) #Mac 분들은 주의해주세요
+>>>>>>> 0f784c0c7adf1f37e4e5a87b6f5fba949b8c4010
