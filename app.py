@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, jsonify
 from datetime import datetime, timedelta
 from pymongo import MongoClient
-# import datetime
+from bson.objectid import ObjectId
+
 
 def dateToStr (date, pattern) : # date를 string으로 바꿔주되, pattern대로 바꿔주는 함수
     stringified = date.strftime(pattern)
@@ -62,9 +63,8 @@ def showHabit_post():
     #print(results)
     return jsonify({'result': results})
 
-
-@app.route("/addHabit", methods=["POST"])
-def addHabit_post():
+@app.route("/Habit", methods=["POST"])
+def Habit_post():
     userid_receive = request.form['User_ID_give']
     todo_receive = request.form['TODO_give']
     complete_recive = [True,True,True,True,True,True,True]
@@ -72,7 +72,7 @@ def addHabit_post():
     week_list = findWeekDate(datetime.today())
     dtBunch_recive = {}
     for day in range(7):
-         dtBunch_recive[week_list[day]] = False
+        dtBunch_recive[week_list[day]] = False
 
     doc = {
         'userid' : userid_receive,
@@ -85,6 +85,25 @@ def addHabit_post():
 
     db.habits.insert_one(doc)
     return jsonify({'result': 'result 완료!'})
+    
+@app.route("/Habit/<id>", methods=["DELETE","PUT"])
+def Habit_del_put(id):
+    if request.method == 'DELETE':
+        print('del',id)
+        query = {"_id": ObjectId(id)}
+        db.habits.delete_one(query)
+        return jsonify({'result': 'result 완료!'})
+    
+    elif request.method == 'PUT':
+        
+        example = request.json
+        print('PUT',id,example)
+        query = {"_id": ObjectId(id)}
+        new_values = {"$set": example}
+
+        db.habits.update_one(query, new_values)
+
+        return jsonify({'result': 'result 완료!'})
 
 
 @app.route("/dateShow", methods=["GET"])

@@ -47,25 +47,25 @@
     </style>
 </head>
 <script>
-    document.addEventListener("DOMContentLoaded", function(){
+    document.addEventListener("DOMContentLoaded", function () {
         setDate();
-        showHabit('test_id')
+        showHabit('test_id');
     });
-    function showHabit(User_ID){
+    function showHabit(User_ID) {
         let formData = new FormData();
         User_ID = 'test_id'
         formData.append("User_ID_give", User_ID);
         fetch('/showHabit', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
             rows = data["result"]
             console.log(rows)
-            let temp_html =``
+            let temp_html = ``
             $('#habitList').empty();
             rows.forEach(element => {
-            temp_html = `
+                temp_html = `
                             <tr>
                             <td>${element['habit']}
-                            <button id="updateHabit">수정</button>
-                            <button id="deleteHabit">삭제</button>
+                            <button id="updateHabit" onclick = "updateHabit('${element['_id']}')">수정</button>
+                            <button id="deleteHabit" onclick = "deleteHabit('${element['_id']}')">삭제</button>
                             </td>
                             <td><input type="checkbox"></td>
                             <td><input type="checkbox"></td>
@@ -78,8 +78,8 @@
                             </tr>
             `
 
-            //console.log(temp_html)
-            $("#habitList").append(temp_html); //$('#board_list').append(temp_html)
+                //console.log(temp_html)
+                $("#habitList").append(temp_html); //$('#board_list').append(temp_html)
             });
             // $("#board_list").append(temp_html);
         });
@@ -100,10 +100,47 @@
         formData.append("displayDate_give", displayDate);
 
 
-        fetch('/addHabit', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {});
+        fetch('/Habit', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => { });
         showHabit('test_id')
+    }
+
+    function deleteHabit(_id) {
+        if (confirm("정말 삭제하시겠습니까 ?") == true) {
+            fetch('/Habit/' + _id, { method: "DELETE" }).then((res) => res.json()).then((data) => {
+
+            });
+
+            showHabit('test_id')
         }
 
+
+    }
+
+    function updateHabit(_id) {
+
+
+
+        let habit_update = prompt("수정할 습관을 입력해주세요")
+
+        if (habit_update == null || habit_update == "") {
+            alert("아무것도 입력하지 않으셨네요 수정을 안합니다")
+        } else {
+            console.log(_id, habit_update)
+            let formData = new FormData();
+
+            let data = {
+                'habit': habit_update
+            };
+            formData.append('habit_update_give', habit_update);
+            fetch("/Habit/" + _id, { method: "PUT", headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }).then((res) => res.json()).then((data) => {
+
+            });
+            showHabit('test_id')
+        }
+
+
+
+    }
 
     function setDate() {
         fetch("/dateShow").then(response => response.json()).then(data => {
@@ -131,47 +168,47 @@
             <button id="addHabit" onclick="addHabit()">추가</button>
         </div>
         <div class="add-habit">
-        <table>
-            <thead>
-                <tr class="header">
-                    <th class="header__info">habit</th>
+            <table>
+                <thead>
+                    <tr class="header">
+                        <th class="header__info">habit</th>
 
-                    <th class="header__progress">진도율</th>
-                </tr>
-            </thead>
-            <tbody id="habitList">
-                <!-- 추가 습관 행이 이 위치에 자동으로 입력됩니다. -->
-                <tr>
-                    <td>제목1
-                        <button id="updateHabit">수정</button>
-                        <button id="deleteHabit">삭제</button>
-                    </td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td> 30 % </td>
-                </tr>
-                <tr>
-                    <td>제목2
-                        <button id="updateHabit">수정</button>
-                        <button id="deleteHabit">삭제</button>
-                    </td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td> 100%</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                        <th class="header__progress">진도율</th>
+                    </tr>
+                </thead>
+                <tbody id="habitList">
+                    <!-- 추가 습관 행이 이 위치에 자동으로 입력됩니다. -->
+                    <tr>
+                        <td>제목1
+                            <button id="updateHabit">수정</button>
+                            <button id="deleteHabit">삭제</button>
+                        </td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td> 30 % </td>
+                    </tr>
+                    <tr>
+                        <td>제목2
+                            <button id="updateHabit">수정</button>
+                            <button id="deleteHabit">삭제</button>
+                        </td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td> 100%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 </body>
 
 </html>
