@@ -46,6 +46,32 @@
     </style>
 </head>
 <script>
+<<<<<<< HEAD
+    function addHabit() {
+        let formData = new FormData();
+
+        let TODO = habitInput.value
+        let User_ID = 'test_id';
+        let complete = 'complete';
+        let displayDate = 'display';
+        // //let dtBunch = {
+        //     "name": "Bob",
+        //     "london": true,
+        //     "paris": false,
+        //     "new-york": true
+        // }
+
+        formData.append("TODO_give", TODO);
+        formData.append("User_ID_give", User_ID);
+        formData.append("complete_give", complete);
+        formData.append("displayDate_give", displayDate);
+        //formData.append("dtBunch_give", dtBunch);
+
+        fetch('/addHabit', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
+            alert(data["result"]);
+            window.location.reload()
+        });
+=======
     document.addEventListener("DOMContentLoaded", function(){
         setDate();
     });
@@ -65,16 +91,67 @@
                 document.querySelector(".header__info").insertAdjacentHTML("afterend", addHtml);
             })
         })
+>>>>>>> a7cb65879a5b5a9ae1a9b99ee747c0bde1a1d537
     }
 </script>
+
 <body>
     <div class="container">
         <h1>일주일 단위 Habit Tracker</h1>
         <div class="add-habit">
             <input type="text" id="habitInput" placeholder="새로운 습관 추가">
-            <button id="addHabit">추가</button>
+            <button id="addHabit" onclick="addHabit()">추가</button>
         </div>
         <div class="add-habit">
+<<<<<<< HEAD
+            <table>
+                <thead>
+                    <tr>
+                        <th>habit</th>
+                        <th>3/27<br>월요일</th>
+                        <th>3/28<br>화요일</th>
+                        <th>3/29<br>수요일</th>
+                        <th>3/30<br>목요일</th>
+                        <th>3/31<br>금요일</th>
+                        <th>4/1<br>토요일</th>
+                        <th>4/2<br>일요일</th>
+                        <th>진도율</th>
+                    </tr>
+                </thead>
+                <tbody id="habitList">
+                    <!-- 추가 습관 행이 이 위치에 자동으로 입력됩니다. -->
+                    <tr>
+                        <td>제목1
+                            <button id="updateHabit">수정</button>
+                            <button id="deleteHabit">삭제</button>
+                        </td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td> 30 % </td>
+                    </tr>
+                    <tr>
+                        <td>제목2
+                            <button id="updateHabit">수정</button>
+                            <button id="deleteHabit">삭제</button>
+                        </td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox"></td>
+                        <td> 100%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+=======
         <table>
             <thead>
                 <tr class="header">
@@ -116,6 +193,7 @@
             </tbody>
         </table>
     </div>
+>>>>>>> a7cb65879a5b5a9ae1a9b99ee747c0bde1a1d537
 
 </body>
 
