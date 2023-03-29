@@ -49,9 +49,9 @@
 <script>
     document.addEventListener("DOMContentLoaded", function(){
         setDate();
-        showHabit('test_id');
+        showHabit('test_id')
     });
-    function showHabit(){
+    function showHabit(User_ID){
         let formData = new FormData();
         User_ID = 'test_id'
         formData.append("User_ID_give", User_ID);
@@ -110,7 +110,7 @@
             console.log(data)
             const dates = data.result;
             console.log(dates)
-            dates.forEach(v => {
+            dates.slice().reverse().forEach(v => {
                 const dayArray = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"]
                 const day = dayArray[new Date(v).getDay()]
                 console.log(day)

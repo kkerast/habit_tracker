@@ -59,7 +59,7 @@ def showHabit_post():
         document['_id'] = str(document['_id'])
         results.append(document)
 
-    print(results)
+    #print(results)
     return jsonify({'result': results})
 
 
@@ -69,12 +69,10 @@ def addHabit_post():
     todo_receive = request.form['TODO_give']
     complete_recive = [True,True,True,True,True,True,True]
     displayDate_recive = ['2023-03-28','2023-03-29','2023-03-30','2023-03-31','2023-04-01','2023-04-02','2023-04-03']
-
+    week_list = findWeekDate(datetime.today())
     dtBunch_recive = {}
     for day in range(7):
-        dt = datetime.today() + timedelta(days=day)
-        result = dt.strftime("%Y-%m-%d")
-        dtBunch_recive[result] = False
+         dtBunch_recive[week_list[day]] = False
 
     doc = {
         'userid' : userid_receive,
@@ -94,12 +92,10 @@ def getWeekDates() :
     # 오늘 날짜를 계산해서, 오늘 날짜가 포함된 월 ~ 일의 date를 프론트로 리턴
     now = datetime.today()
     thisWeekDates = findWeekDate(now)
+    #print(thisWeekDates)
     return jsonify({"result": thisWeekDates})
 
 
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5001, debug=True) #Mac 용 세팅
 #    app.run('0.0.0.0', port=5000, debug=True) #Mac 분들은 주의해주세요
-
-
-#asdlkf
