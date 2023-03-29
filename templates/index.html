@@ -46,6 +46,7 @@
     </style>
 </head>
 <script>
+<<<<<<< HEAD
     function addHabit() {
         let formData = new FormData();
 
@@ -70,6 +71,27 @@
             alert(data["result"]);
             window.location.reload()
         });
+=======
+    document.addEventListener("DOMContentLoaded", function(){
+        setDate();
+    });
+
+    function setDate() {
+        fetch("/dateShow").then(response => response.json()).then(data => {
+            console.log(data)
+            const dates = data.result;
+            console.log(dates)
+            dates.forEach(v => {
+                const dayArray = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"]
+                const day = dayArray[new Date(v).getDay()]
+                console.log(day)
+                const addHtml = `
+                                <th><span class="date">${v}</span><br><span class="day">${day}</span></th>
+                `
+                document.querySelector(".header__info").insertAdjacentHTML("afterend", addHtml);
+            })
+        })
+>>>>>>> a7cb65879a5b5a9ae1a9b99ee747c0bde1a1d537
     }
 </script>
 
@@ -81,6 +103,7 @@
             <button id="addHabit" onclick="addHabit()">추가</button>
         </div>
         <div class="add-habit">
+<<<<<<< HEAD
             <table>
                 <thead>
                     <tr>
@@ -128,6 +151,49 @@
                 </tbody>
             </table>
         </div>
+=======
+        <table>
+            <thead>
+                <tr class="header">
+                    <th class="header__info">habit</th>
+
+                    <th class="header__progress">진도율</th>
+                </tr>
+            </thead>
+            <tbody id="habitList">
+                <!-- 추가 습관 행이 이 위치에 자동으로 입력됩니다. -->
+                <tr>
+                    <td>제목1
+                        <button id="updateHabit">수정</button>
+                        <button id="deleteHabit">삭제</button>
+                    </td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td> 30 % </td>
+                </tr>
+                <tr>
+                    <td>제목2
+                        <button id="updateHabit">수정</button>
+                        <button id="deleteHabit">삭제</button>
+                    </td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td> 100%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+>>>>>>> a7cb65879a5b5a9ae1a9b99ee747c0bde1a1d537
 
 </body>
 
