@@ -101,7 +101,7 @@
 
 
         fetch('/Habit', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => { });
-        showHabit('test_id')
+        window.location.reload()
     }
 
     function deleteHabit(_id) {
@@ -110,7 +110,7 @@
 
             });
 
-            showHabit('test_id')
+            window.location.reload()
         }
 
 
@@ -135,7 +135,7 @@
             fetch("/Habit/" + _id, { method: "PUT", headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }).then((res) => res.json()).then((data) => {
 
             });
-            showHabit('test_id')
+            window.location.reload()
         }
 
 
