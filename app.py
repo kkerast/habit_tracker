@@ -43,7 +43,7 @@ app = Flask(__name__)
 
 ca=certifi.where()
 
-client = MongoClient('mongodb+srv://sparta:test@cluster0.9fktzhz.mongodb.net/?retryWrites=true&w=majority') #각자의 DB 주소를 넣어주세요
+client = MongoClient('YOUR MONGO DB URL') #각자의 DB 주소를 넣어주세요
 db = client.habitTracker #각자의 DB 및 collection
 
 # JWT 토큰을 만들 때 필요한 비밀문자열입니다. 아무거나 입력해도 괜찮습니다.
