@@ -1,107 +1,98 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
+
 <head>
-	<title>Login</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<style>
-		body {
-			font-family: Arial, sans-serif;
-			background-color: #f2f2f2;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			height: 100vh;
-		}
 
-		h1 {
-			text-align: center;
-			color: #333;
-		}
+    <!-- Webpage Title -->
+    <title>Hello, world!</title>
 
-		form {
-			width: 100%;
-			max-width: 500px;
-			background-color: #fff;
-			padding: 20px;
-			border-radius: 5px;
-			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-		}
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-		label {
-			display: block;
-			margin-bottom: 10px;
-			color: #555;
-			width: 100%;
-			max-width: 400px;
-		}
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
-		input[type="text"], input[type="password"] {
-			width: 100%;
-			padding: 10px;
-			border: 2px solid #ccc;
-			border-radius: 5px;
-			margin-bottom: 20px;
-			font-size: 16px;
-			box-shadow: 1px 1px 5px #d3d3d3;
-			max-width: 400px;
-		}
 
-		input[type="text"]:focus, input[type="password"]:focus {
-			border-color: royalblue;
-			box-shadow: 1px 1px 5px #87CEFA;
-		}
+    <script>
+        function enterkey(event_name) {
+            if (window.event.keyCode == 13) {
+                // 엔터키가 눌렸을 때
+                if (event_name == 'login')
+                    login()
+            }
+        }
+        {% if msg %}
+        alert("{{ msg }}")
+        {% endif %}
+        // ['쿠키'라는 개념에 대해 알아봅시다]
+        // 로그인을 구현하면, 반드시 쿠키라는 개념을 사용합니다.
+        // 페이지에 관계없이 브라우저에 임시로 저장되는 정보입니다. 키:밸류 형태(딕셔너리 형태)로 저장됩니다.
+        // 쿠키가 있기 때문에, 한번 로그인하면 네이버에서 다시 로그인할 필요가 없는 것입니다.
+        // 브라우저를 닫으면 자동 삭제되게 하거나, 일정 시간이 지나면 삭제되게 할 수 있습니다.
+        function login() {
+            $.ajax({
+                type: "POST",
+                url: "/api/login",
+                data: { id_give: $('#userid').val(), pw_give: $('#userpw').val() },
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        // 로그인이 정상적으로 되면, 토큰을 받아옵니다.
+                        // 이 토큰을 mytoken이라는 키 값으로 쿠키에 저장합니다.
+                        $.cookie('mytoken', response['token']);
 
-		button[type="submit"] {
-			background-color: royalblue;
-			color: #fff;
-			border: none;
-			border-radius: 5px;
-			padding: 10px 20px;
-			font-size: 16px;
-			cursor: pointer;
-			transition: background-color 0.3s;
-			position: relative;
-			max-width: 200px;
-		}
+                        alert('로그인 완료!')
+                        window.location.href = '/'
+                    } else {
+                        // 로그인이 안되면 에러메시지를 띄웁니다.
+                        alert(response['msg'])
+                    }
+                }
+            })
+        }
+        function register() {
+            window.location.href = '/register'
+        }
+    </script>
 
-		button[type="submit"]:hover {
-			background-color: #1851b0;
-		}
-
-		button[type="submit"]:before {
-			content: "";
-			position: absolute;
-			top: -20px;
-			right: -20px;
-			bottom: -20px;
-			left: -20px;
-			background-image: radial-gradient(ellipse at center, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 70%);
-			z-index: -1;
-			border-radius: 5px;
-			opacity: 0;
-			transition: opacity 0.3s;
-		}
-
-		button[type="submit"]:hover:before {
-			opacity: 1;
-		}
-	</style>
 </head>
+
 <body>
-	<h1>Login</h1>
-	<form>
-		<label for="username">Username:</label>
-		<input type="text" id="username" name="username" required>
-
-		<label for="password">Password:</label>
-		<input type="password" id="password" name="password" required>
-
-		<button type="submit">Login</button>
-	</form>
+    <div class="section has-text-centered">
+        <h1 class="title">로그인 페이지</h1>
+        <div class="container" style="width:60%">
+            <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label class="label" for="userid">ID</label>
+                </div>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            <input type="text" class="input" id="userid" aria-describedby="emailHelp"
+                                placeholder="My ID">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label class="label" for="userpw">PW</label>
+                </div>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            <input type="password" class="input" id="userpw" placeholder="My Password" onkeyup="enterkey('login')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="button is-primary" onclick="login()">로그인</button>
+            <button class="button is-primary" onclick="register()">회원가입</button>
+        </div>
+    </div>
 </body>
+
 </html>

@@ -2,19 +2,28 @@
 <html lang="ko">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini Habit Tracker</title>
-    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+
+  <!-- Webpage Title -->
+  <title>Hello, world!</title>
+
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bulma CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+  <!-- JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
 
         table {
             border-collapse: collapse;
@@ -44,171 +53,459 @@
         .add-habit {
             margin-bottom: 20px;
         }
+
+        .habit-menu {
+            display: flex;
+            justify-content: space-between;
+        }
+        .nodate {
+            color: gray;
+            background-color: rgba(0, 0, 0, 0.05);
+            font-size: 10pt;
+        }
     </style>
 </head>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        setDate();
-        showHabit('test_id');
-    });
-    function showHabit(User_ID) {
-        let formData = new FormData();
-        User_ID = 'test_id'
-        formData.append("User_ID_give", User_ID);
-        fetch('/showHabit', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
-            rows = data["result"]
-            console.log(rows)
-            let temp_html = ``
-            $('#habitList').empty();
-            rows.forEach(element => {
-                temp_html = `
-                            <tr>
-                            <td>${element['habit']}
-                            <button id="updateHabit" onclick = "updateHabit('${element['_id']}')">수정</button>
-                            <button id="deleteHabit" onclick = "deleteHabit('${element['_id']}')">삭제</button>
-                            </td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                            <td><input type="checkbox"></td>
-                            <td> 30 % </td>
-                            </tr>
-            `
 
-                //console.log(temp_html)
-                $("#habitList").append(temp_html); //$('#board_list').append(temp_html)
-            });
-            // $("#board_list").append(temp_html);
-        });
-    }
+<body>
+    <div class="container">
+        
+        <header class="habit-header">
+            <h1>Mini Habit Tracker</h1>
+			<h5 class="subtitle">나의 닉네임은: {{nickname}}</h5>
+      		<button class="button is-danger" onclick="logout()">로그아웃하기</button>
+        </header>
+        <nav class="habit-menu">
+            <div class="add-habit">
+          <input type="text" id="habitInput" onkeyup="enterkey('addHabit')" placeholder="새로운 습관 추가">
+                <button id="addHabit" onclick="addHabit()">추가</button>
+            </div>
+            <div class="change-date">
+                <label for="datepicker">조회하고 싶은 과거 날짜를 선택해주세요</label>
+                <input type="week" name="datepicker" id="date-picked">
+                <button class="datepicker-confirm" onclick="getChangedDate()">확인</button>
+            </div>
+        </nav>
+        <main class="table-habit">
+        <table>
+            <thead>
+                <tr class="header">
+                    <th class="header__info">habit</th>
 
-    function addHabit() {
-        let formData = new FormData();
-
-        let TODO = habitInput.value;
-        let User_ID = 'test_id';
-        let complete = 'complete';
-        let displayDate = 'display';
-
-
-        formData.append("TODO_give", TODO);
-        formData.append("User_ID_give", User_ID);
-        formData.append("complete_give", complete);
-        formData.append("displayDate_give", displayDate);
-
-
-        fetch('/Habit', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => { });
-        window.location.reload()
-    }
-
-    function deleteHabit(_id) {
-        if (confirm("정말 삭제하시겠습니까 ?") == true) {
-            fetch('/Habit/' + _id, { method: "DELETE" }).then((res) => res.json()).then((data) => {
-
-            });
-
-            window.location.reload()
+                    <th class="habit-progress">진도율</th>
+                </tr>
+            </thead>
+            <tbody id="habitList">
+                <!-- 추가 습관 행이 이 위치에 자동으로 입력됩니다. -->
+                <tr>
+                    <td>제목1
+                        <button id="updateHabit">수정</button>
+                        <button id="deleteHabit">삭제</button>
+                    </td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td> 30 % </td>
+                </tr>
+                <tr>
+                    <td>제목2
+                        <button id="updateHabit">수정</button>
+                        <button id="deleteHabit">삭제</button>
+                    </td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                    <td> 100%</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+    <script>
+        // 로그아웃은 내가 가지고 있는 토큰만 쿠키에서 없애면 됩니다.
+        function logout() {
+            $.removeCookie('mytoken');
+            alert('로그아웃!')
+            window.location.href = '/login'
         }
 
+        document.addEventListener("DOMContentLoaded", function(){
+            const todayStr = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().split("T")[0];
+            getAndSetDate();
+            showHabit(`{{nickname}}`, todayStr);
+            // datepicker 오늘 이후의 날짜 선택하지 못하게 제한 걸기
+            setLimitWeek("#date-picked");
+        });
 
-    }
+        function enterkey(event_name) {
+            if (window.event.keyCode == 13) {
+                // 엔터키가 눌렸을 때
+                if(event_name == 'addHabit')
+                addHabit()
+            }
+        }
 
-    function updateHabit(_id) {
+    
+        function setLimitWeek (selectQuery) { // 오늘 이후의 날짜를 선택하지 못하도록 제한 거는 함수, selectQuery는 week input의 selectQuery (string)
+            const todayStr = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().split("T")[0];
+            const today = new Date(todayStr);
+            const thisYear = today.getFullYear()
+            const thisYearBeginStr = thisYear + "-01-01"
+            const firstDay = new Date(thisYearBeginStr);
+            const weeksFromStart = Math.ceil((Math.abs((today.getTime() - firstDay.getTime()) / (1000 * 60 * 60 * 24)) / 7))
+            const yearWeekStr = thisYear + "-W" + weeksFromStart
+
+            console.log(document.querySelector(selectQuery))
+            document.querySelector(selectQuery).setAttribute("max", yearWeekStr);
+        }
+
+        function getWeekDateByWeekNum (yearNum, weekNum) { // 연도-주 단위를 받아 해당 연도의 주차 시작이 어떤 날짜인지 받아오는 함수 (return dateStr)
+            const weekStartsAt = new Date(yearNum, 0, 1 + (weekNum - 1) * 7);
+            const dayOfWeek = weekStartsAt.getDay();
+            let isoWeekStart = weekStartsAt;
+            if (dayOfWeek <= 4) {
+                isoWeekStart.setDate(weekStartsAt.getDate() - dayOfWeek + 1);
+            } else {
+                isoWeekStart.setDate(weekStartsAt.getDate() + 8 - dayOfWeek);
+            }
+            const startDateString = new Date(isoWeekStart - new Date().getTimezoneOffset() * 60000).toISOString().split("T")[0];
+            return startDateString;
+        }
+
+        function showHabit(User_ID, dateStr){
+            let formData = new FormData();
+            console.log(`dateStr: ${dateStr}`)
+            formData.append("dateStr_give", dateStr)
+            formData.append("User_ID_give", User_ID);
+            fetch('/showHabit', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
+                let habitHTML = ``
+                document.querySelector("#habitList").innerHTML = ""
+                data["result"].forEach(v => {
+                    console.log(v)
+                    habitHTML += `
+                                <tr>
+                                    <td>${v["habit"]}
+                                    <button id="updateHabit" onclick = "updateHabit('${v['_id']}')">수정</button>
+                                    <button id="deleteHabit" onclick = "deleteHabit('${v['_id']}')">삭제</button>
+                                    </td>                    
+                    `
+                    let count = 0
+                    let total = 0
+                    const weeklyComplete = v["complete"]
+                    for (j = 0; j < weeklyComplete.length; j++) {
+                        const dailyComplete = weeklyComplete[j]
+                        if (typeof(dailyComplete)==="boolean") {
+                            if (dailyComplete) {
+                                const addHTML = `
+                                                <td><input onclick = "habitcomp('${v['_id']}')" id = "my_checkbox_${j}_${v['_id']}" type="checkbox" checked></td>
+                                `
+                                habitHTML += addHTML
+                                count++
+                                total++
+                            } else {
+                                const addHTML = `
+                                                <td><input onclick = "habitcomp('${v['_id']}')" id = "my_checkbox_${j}_${v['_id']}" type="checkbox"></td>
+                                `
+                                habitHTML += addHTML
+                                total++
+                            }
+                        } else { // 만약 들어간 값이 string이면
+                            if (dailyComplete === "none") {
+                                const addHTML = `
+                                                <td class="nodate">habit 설정 이전 🫢</td>
+                                `
+                                habitHTML += addHTML
+                            }
+                        }
+                    }
+                    if (count != 0 && total != 0) {
+                        const lastHTML = `
+                                        <td class="habit-progress"> ${Number.parseFloat(count / total * 100).toFixed(0)}% </td>
+                                    </tr>`
+                        habitHTML += lastHTML
+                    } else {
+                        const lastHTML = `
+                                        <td class="habit-progress"> o% </td>
+                                    </tr>`
+                        habitHTML += lastHTML
+                    }
+
+                })
+                document.querySelector("#habitList").innerHTML = habitHTML;   
+            })
+            //     rows = data["result"]
+            //     console.log(rows)
+            //     let temp_html = ``
+            //     $('#habitList').empty();
+            //     rows.forEach(element => {
+            //         temp_html = `
+            //                     <tr>
+            //                     <td>${element['habit']}
+            //                     <button id="updateHabit" onclick = "updateHabit('${element['_id']}')">수정</button>
+            //                     <button id="deleteHabit" onclick = "deleteHabit('${element['_id']}')">삭제</button>
+            //                     </td>
+            //                     <td><input type="checkbox"></td>
+            //                     <td><input type="checkbox"></td>
+            //                     <td><input type="checkbox"></td>
+            //                     <td><input type="checkbox"></td>
+            //                     <td><input type="checkbox"></td>
+            //                     <td><input type="checkbox"></td>
+            //                     <td><input type="checkbox"></td>
+            //                     <td> 30 % </td>
+            //                     </tr>
+            //     `
+
+            //         //console.log(temp_html)
+            //         $("#habitList").append(temp_html); //$('#board_list').append(temp_html)
+            //     });
+            //     // $("#board_list").append(temp_html);
+            // });
+        }
+
+        function addHabit() {
+            let formData = new FormData();
+
+            let TODO = habitInput.value;
+        let User_ID = `{{nickname}}`;
+            let complete = 'complete';
+            let displayDate = 'display';
+        if (TODO == '') {
+            alert("습관을 입력해주세요!!")
+            return;
+        }
+
+            formData.append("TODO_give", TODO);
+            formData.append("User_ID_give", User_ID);
+            formData.append("complete_give", complete);
+            formData.append("displayDate_give", displayDate);
+
+
+        fetch('/Habit', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
+            rows = data["result"]
+            if (rows == 'add') {
+            window.location.reload();
+            }
+            else {
+            alert(rows)
+            }
+
+
+        });
 
 
 
-        let habit_update = prompt("수정할 습관을 입력해주세요")
+        }
+
+        function deleteHabit(_id) {
+            if (confirm("정말 삭제하시겠습니까 ?") == true) {
+                fetch('/Habit/' + _id, { method: "DELETE" }).then((res) => res.json()).then((data) => {
+
+                });
+
+                window.location.reload()
+            }
+
+
+        }
+
+        function updateHabit(_id) {
+
+            let habit_update = prompt("수정할 습관을 입력해주세요")
 
         if (habit_update == null || habit_update == "") {
             alert("아무것도 입력하지 않으셨네요 수정을 안합니다")
         } else {
             console.log(_id, habit_update)
-            let formData = new FormData();
-
+            // let User_ID = 'test_id';
+            let User_ID = `{{nickname}}`;
+            console.log(User_ID,habit_update)
             let data = {
-                'habit': habit_update
+            'TODO_give': habit_update,
+            'User_ID_give': User_ID
             };
-            formData.append('habit_update_give', habit_update);
+            console.log(data)
             fetch("/Habit/" + _id, { method: "PUT", headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }).then((res) => res.json()).then((data) => {
+            rows = data["result"]
+            console.log(rows)
+            if (rows == 'update') {
+                window.location.reload();
+            }
+            else {
+                alert(rows)
+            }
 
             });
-            window.location.reload()
+
         }
 
 
 
-    }
+        }
 
-    function setDate() {
-        fetch("/dateShow").then(response => response.json()).then(data => {
-            console.log(data)
-            const dates = data.result;
-            console.log(dates)
-            dates.slice().reverse().forEach(v => {
+        function getAndSetDate() {
+            fetch("/dateShow").then(response => response.json()).then(data => {
+                const dates = data.result;
+                habitSetDate(dates)
+            });
+        }
+
+        // function getAndSetDate() {
+        //     fetch("/dateShow").then(response => response.json()).then(data => {
+        //         console.log(data)
+        //         const dates = data.result;
+        //         console.log(dates)
+        //         dates.slice().reverse().forEach(v => {
+        //             console.log(v)
+        //             const dayArray = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"]
+        //             const day = dayArray[new Date(v).getDay()]
+        //             console.log(day)
+        //             const addHtml = `
+        //                             <th><span class="date">${v}</span><br><span class="day">${day}</span></th>
+        //             `
+        //             document.querySelector(".header__info").insertAdjacentHTML("afterend", addHtml);
+        //         });
+        //     })
+        // }
+
+        function habitSetDate(dateStrArray) {
+            let headerHTML = ``
+            dateStrArray.slice().reverse().forEach(v => {
                 const dayArray = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"]
                 const day = dayArray[new Date(v).getDay()]
-                console.log(day)
-                const addHtml = `
+                const addHTML = `
                                 <th><span class="date">${v}</span><br><span class="day">${day}</span></th>
                 `
-                document.querySelector(".header__info").insertAdjacentHTML("afterend", addHtml);
+                headerHTML = addHTML + headerHTML
             });
-        })
-    }
-</script>
 
-<body>
-    <div class="container">
-        <h1>Mini Habit Tracker</h1>
-        <div class="add-habit">
-            <input type="text" id="habitInput" placeholder="새로운 습관 추가">
-            <button id="addHabit" onclick="addHabit()">추가</button>
-        </div>
-        <div class="add-habit">
-            <table>
-                <thead>
-                    <tr class="header">
-                        <th class="header__info">habit</th>
+            document.querySelector(".header").innerHTML = ""
+            headerHTML = `
+                                    <th class="header__info">habit</th>
+            ` + headerHTML //날짜가 뒤바뀌어서 수정했습니다
 
-                        <th class="header__progress">진도율</th>
-                    </tr>
-                </thead>
-                <tbody id="habitList">
-                    <!-- 추가 습관 행이 이 위치에 자동으로 입력됩니다. -->
-                    <tr>
-                        <td>제목1
-                            <button id="updateHabit">수정</button>
-                            <button id="deleteHabit">삭제</button>
-                        </td>
-                        <td><input type="checkbox"></td>
-                        <td><input type="checkbox"></td>
-                        <td><input type="checkbox"></td>
-                        <td><input type="checkbox"></td>
-                        <td><input type="checkbox"></td>
-                        <td><input type="checkbox"></td>
-                        <td><input type="checkbox"></td>
-                        <td> 30 % </td>
-                    </tr>
-                    <tr>
-                        <td>제목2
-                            <button id="updateHabit">수정</button>
-                            <button id="deleteHabit">삭제</button>
-                        </td>
-                        <td><input type="checkbox"></td>
-                        <td><input type="checkbox"></td>
-                        <td><input type="checkbox"></td>
-                        <td><input type="checkbox"></td>
-                        <td><input type="checkbox"></td>
-                        <td><input type="checkbox"></td>
-                        <td><input type="checkbox"></td>
-                        <td> 100%</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+
+            const lastHTML = `
+                                            <th class="header__progress">진도율</th>
+                                        </tr>
+                        `
+            headerHTML += lastHTML
+            document.querySelector(".header").innerHTML = headerHTML;
+        }
+
+
+        function getChangedDate() { // datepicker 조회 대상 주의 첫번째 날짜 스트링 구하여 백엔드로 넘겨주고 백엔드에서 제작한 데이터 꾸러미 풀어서 HTML에 써줌
+            const userId = `{{nickname}}`;
+            const pickerDate = document.querySelector("#date-picked").value;
+            if (pickerDate.length !== 0) { // pickerDate에 아무 날짜도 선택하지 않고 '확인' 버튼만 누른 것은 제외
+
+                const yearWeek = pickerDate.split("-W");
+                const weekStartDate = getWeekDateByWeekNum(Number(yearWeek[0]), Number(yearWeek[1]));
+                const queryString = `/habitDateChange?userid="${userId}"&weekStartDate="${weekStartDate}"`
+
+                fetch(queryString).then(res => res.json()).then((data) => {
+                    const dataArray = data["result"]
+                    let repackData = []
+                    for (i = dataArray.length; i > 0; i--) {
+                        repackData.push(dataArray[i - 1])
+                    }
+
+                    const displayDate = repackData[0]["displayDate"]
+
+
+                    habitSetDate(displayDate); // 바뀐 날짜 입력해주기
+                    
+                    document.querySelector("#habitList").innerHTML = ""
+                    let habitHTML = ``
+                    repackData.forEach(v => {
+                        console.log(v)
+                        habitHTML += `
+                                    <tr>
+                                        <td>${v["habit"]}
+                                        <button id="updateHabit" onclick = "updateHabit('${v['_id']}')">수정</button>
+                                        <button id="deleteHabit" onclick = "deleteHabit('${v['_id']}')">삭제</button>
+                                        </td>                    
+                        `
+                        const weeklyComplete = v["complete"]
+                        let count = 0
+                        let total = 0
+                        for (j = 0; j < weeklyComplete.length; j++) {
+                            const dailyComplete = weeklyComplete[j]
+                            if (typeof(dailyComplete)==="boolean") {
+                                if (dailyComplete) {
+                                    const addHTML = `
+                                                    <td><input onclick = "habitcomp('${v['_id']}')" id = "my_checkbox_${j}_${v['_id']}" type="checkbox" checked></td>
+                                    `
+                                    habitHTML += addHTML
+                                    count++
+                                    total++
+                                } else {
+                                    const addHTML = `
+                                                    <td><input onclick = "habitcomp('${v['_id']}')" id = "my_checkbox_${j}_${v['_id']}" type="checkbox"></td>
+                                    `
+                                    habitHTML += addHTML
+                                    total++
+                                }
+                            } else { // 만약 들어간 값이 string이면
+                                if (dailyComplete === 'none') {
+                                    const addHTML = `
+                                                    <td class="nodate">habit 설정 이전 🫢</td>
+                                    `
+                                    habitHTML += addHTML
+                                }
+                            }
+                        }
+                        //진행률
+                        if (count != 0 && total != 0) {
+                            const lastHTML = `
+                                        <td class="habit-progress"> ${Number.parseFloat(count / total * 100).toFixed(0)}% </td>
+                                    </tr>`
+                            habitHTML += lastHTML
+                        } else {
+                            const lastHTML = `
+                                        <td class="habit-progress"> o% </td>
+                                    </tr>`
+                            habitHTML += lastHTML
+                        }
+
+                    })
+                    document.querySelector("#habitList").innerHTML = habitHTML;   
+                })
+            } else {
+                return
+            }
+        }
+
+        function habitcomp(_id) {
+            let checklist = []
+            for (i = 0; i < 7; i++) {
+                let idname = 'my_checkbox_' + i + '_' + _id
+                console.log(idname)
+
+                if (document.getElementById(idname) === null) {
+                    checklist.push('none')
+                } else {
+                    let checkbox = document.getElementById(idname);
+                    console.log(checkbox)
+                    let is_checked = checkbox.checked;
+                    checklist.push(is_checked)
+                }
+            }
+            console.log(_id, checklist) ///여기까진 잘 나온다!
+
+            let formData = new FormData();
+            formData.append('habit_update_give', checklist);
+            fetch('/HabitComp/' + _id, { method: "POST", body: formData }).then((res) => res.json()).then((data) => {
+                    
+            });
+        window.location.reload()
+        }
+    </script>
 </body>
 
 </html>
